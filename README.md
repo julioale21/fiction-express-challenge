@@ -134,3 +134,40 @@ La API con json-server debe simular correctamente la funcionalidad de un servido
 - Base de datos mock (Fake API): json-server o cualquier otra herramienta que permita crear una fake API rápidamente.
 - Métricas: Pueden ser guardadas en memoria local (localStorage o state del frontend). No es necesario persistir los datos en una base de datos.
 
+
+
+### Parte 2: Preguntas Teóricas
+
+#### Preguntas: 
+Considerando que 1 millón de niños utilizan esta plataforma para leer
+libros y reportar métricas de tiempo de lectura, ¿cómo gestionarías esto a nivel
+técnico? Responde las siguientes preguntas:
+
+1. ¿Qué tipo de base de datos utilizarías para almacenar las métricas de
+lectura de los usuarios? ¿Por qué?
+
+2. ¿Cómo garantizamos la escalabilidad del sistema para soportar una
+carga de 1M de usuarios simultáneos?
+
+3. ¿Has trabajado con alguna base de datos o infraestructura que soporte
+un volumen alto de usuarios y datos? Si es así, cuéntanos tu experiencia y
+qué tecnologías utilizaste.
+
+#### Respuestas: 
+
+1. Para almacenar las métricas de lectura de los usuarios, yo elegiría MongoDB u alguna otra base de datos no relacional. En este caso, MongoDB es una base de datos que se adapta bien a este tipo de datos. MongoDB es flexible, lo que nos permite guardar diferentes tipos de métricas sin tener que cambiar la estructura de la base de datos cada vez. Esto es útil porque podríamos querer añadir nuevas métricas en el futuro. Además, MongoDB es buena manejando muchos datos a la vez, lo cual es importante si tenemos muchos usuarios leyendo al mismo tiempo. Es rápida para guardar información, que es lo que necesitamos al registrar constantemente las métricas de lectura. También nos permite hacer búsquedas y análisis de datos de forma eficiente, lo que nos ayudará a entender cómo leen nuestros usuarios. Si el proyecto crece, MongoDB puede expandirse fácilmente. Y si queremos, podemos usarla en la nube con MongoDB Atlas, lo que facilita su gestión.
+
+2. 
+Podriamos usar una arquitectura de microservicios lo cual nos permite dividir el sistema en partes más pequeñas y manejables que pueden escalar de forma independiente según sea necesario. (Esto es mucho mas eficiente pero tambien agrega complejidad)
+Podriamos implementar un sistema de balanceo de carga para distribuir el tráfico entre múltiples servidores. Esto ayuda a prevenir que un solo servidor se sobrecargue.
+Podriamos utilizar una base de datos distribuida como MongoDB que puede manejar grandes volúmenes de datos y escalar horizontalmente añadiendo más servidores.
+Podriamos aprovechar los servicios en la nube como AWS o Azure, que ofrecen escalado automático y pueden aumentar o disminuir los recursos según la demanda en tiempo real.
+Seria util un sistema de caché, como Redis, para almacenar datos frecuentemente accedidos y reducir la carga en la base de datos principal.
+Si tenemos contenido estatico podriamos utilizar un CDN para distribuir contenido estático, reduciendo la carga en nuestros servidores principales.
+Seria importante optimizar las consultas de base de datos y el código de la aplicación para mejorar la eficiencia.
+Tambien es importante implementar un sistema de monitoreo para identificar y resolver cuellos de botella rápidamente. Aqui es util por ejemplo Datadog, tambien sistemas de logs como Sentry que nos permita tener un track de todo lo que ocurre.
+
+3. Actualmente, estoy trabajando en un sistema que se espera sea utilizado por cerca de 8 millones de usuarios. Aunque los servicios principales están a cargo del cliente, hemos tenido que implementar varias estrategias para optimizar los tiempos de respuesta, ya que algunos de estos servicios son bastante lentos. Nuestro backend funciona como un puente entre estos servicios y nuestro frontend. Una de las estrategias clave ha sido el uso de caché, específicamente con Redis, para almacenar datos frecuentemente accedidos y reducir la carga en los servicios más lentos.
+En un proyecto anterior para una empresa australiana, trabajé con una plataforma educativa que manejaba millones de usuarios. La infraestructura era extensa y compleja. Una de nuestras principales estrategias fue aprovechar la generación estática de contenido con Next.js. El contenido se gestionaba desde un CMS (Sistema de Gestión de Contenidos, en este caso Prismic pero tambien se empezo a implementar para algunos casos Builder.io) y, cada vez que había un cambio, se activaba un webhook que iniciaba el proceso de generación de contenido estático con Next.js.
+Usábamos pipelines para automatizar este proceso, generando el contenido estático y almacenándolo en buckets (almacenamiento en la nube). En el entorno de desarrollo utilizábamos AWS, mientras que en producción usábamos Azure. Este contenido estático se distribuía a través de un CDN (Red de Distribución de Contenidos) con réplicas en diferentes regiones geográficas, lo que reducía significativamente la latencia de acceso para los usuarios.
+La combinación de páginas estáticas servidas desde un CDN, junto con la ejecución de ciertas tareas en procesos separados utilizando servicios serverless como Azure Functions o AWS Lambda, nos permitió manejar grandes volúmenes de datos y alta concurrencia de usuarios de manera eficiente. Este enfoque distribuido y orientado al rendimiento fue clave para soportar la escala masiva de usuarios de la plataforma
