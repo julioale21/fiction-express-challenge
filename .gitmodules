@@ -1,0 +1,6 @@
+[submodule "fiction-express-reader"]
+	path = fiction-express-reader
+	url = https://github.com/julioale21/fiction-express-reader.git
+[submodule "fiction-express-server"]
+	path = fiction-express-server
+	url = https://github.com/julioale21/fiction-express-server.git
