@@ -32,22 +32,6 @@ Este proyecto es una aplicación web para niños que permite la selección y lec
 
 ## Instrucciones para Ejecutar la Aplicación
 
-### Opción 1: Utilizando Docker y Docker Compose
-
-1. Asegúrate de tener Docker instalado y en ejecución.
-2. Clona el repositorio:
-   ```
-   git clone [URL_DEL_REPOSITORIO]
-   ```
-3. Navega al directorio del proyecto.
-4. Ejecuta:
-   ```
-   docker-compose up --build
-   ```
-5. Una vez finalizado, la aplicación estará disponible en: `http://localhost:3000`
-
-### Opción 2: Ejecución Manual
-
 1. Clona el repositorio como se indica arriba.
 2. Navega a cada una de las carpetas de las aplicaciones (backend y frontend).
 3. Sigue las instrucciones detalladas en el README de cada aplicación para su configuración y ejecución.
